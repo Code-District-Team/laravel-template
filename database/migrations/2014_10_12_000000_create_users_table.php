@@ -15,15 +15,13 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name', 255)->nullable();
             $table->string('email', 255)->unique();
             $table->string('password');
             $table->string('api_token', 80)->unique()->nullable()->default(null);
             $table->string('forget_token')->nullable();
             $table->dateTime('forget_token_expires_at', 0)->nullable();
             $table->unsignedInteger('tenant_id');
-            $table->unsignedInteger('role_id')->nullable();
-            $table->unsignedInteger('reference_id')->nullable();
-            $table->unsignedInteger('parent_id')->nullable();
             $table->enum('type', ['Admin', 'User'])->default('User');
             $table->rememberToken();
             $table->softDeletes();
