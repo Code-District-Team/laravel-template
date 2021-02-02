@@ -16,7 +16,6 @@ class CreateTenantsTable extends Migration
         Schema::create('tenants', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('domain_prefix')->unique();
-            $table->unsignedInteger('quickbooks_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -16,7 +16,8 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             'name' => "Hamza Bin Mansoor",
             'email' => "hamza.mansoor@codedistrict.com",
-            'password' => "68a0099b3f45357798639a30c5fe3154",
+            'password' => "68a0099b3f45357798639a30c5fe3154", //new123
+            'type' => "Admin", //new123
             'tenant_id' => "1",
             'created_at' => Carbon::now(),
         ]);
