@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Tenant extends Model {
-
+    use \Eloquence\Behaviours\CamelCasing;
     use SoftDeletes;
 
     public $table = 'tenants';
