@@ -179,7 +179,7 @@ return [
         /*
          * Custom Added Service Providers
          */
-        Barryvdh\Cors\ServiceProvider::class,
+        // Barryvdh\Cors\ServiceProvider::class,
 
     ],
 

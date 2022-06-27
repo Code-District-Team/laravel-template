@@ -17,10 +17,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use App\Scopes\TenantScope;
 use Illuminate\Support\Facades\DB;
-
+use Throwable;
 class UserController extends Controller {
-    
-  
     
     public function login(Request $request) {
         $request->validate([
@@ -85,12 +83,13 @@ class UserController extends Controller {
 
             DB::beginTransaction();
             $userData = $request->except(['company_name', 'domain_prefix']);
-            $userData['name'] = $userData['first_name'] . ' ' . $userData['last_name'];
+            // $userData['name'] = $userData['first_name'] . ' ' . $userData['last_name'];
             $tenant = Tenant::create($request->only(['company_name', 'domain_prefix']));
+
             $userData['tenant_id'] = $tenant->id;
             $userData['type'] = UserType::Admin;
-            $user = User::create($userData);
 
+            $user = User::create($userData);
 
             DB::commit();
 
