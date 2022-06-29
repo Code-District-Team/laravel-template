@@ -17,10 +17,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Route::middleware(['auth.middleware','tenant'])->group(function() {
 Route::middleware(['auth.middleware'])->group(function() {
-        
+
         // Tenant.
-        Route::get('tenant/get', 'TenantController@get')->name('getTenant');
+        // Route::get('tenant/get', 'TenantController@get')->name('getTenant');
         
         // Users.
         Route::get('user/logout', 'UserController@logout')->name('userLogout');
