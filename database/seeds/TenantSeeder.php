@@ -13,6 +13,7 @@ class TenantSeeder extends Seeder
     public function run()
     {
         DB::table('tenants')->insert([
+            'company_name' => "CD",
             'domain_prefix' => "codedistrict"
         ]);
     }

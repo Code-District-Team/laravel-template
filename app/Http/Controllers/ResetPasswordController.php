@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
-
 use Auth;
 use Hash;
 use Carbon\Carbon;
@@ -16,7 +14,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Utilities\Constants;
-
 class ResetPasswordController extends Controller
 {
     public function sendPasswordResetToken(Request $request)
@@ -55,7 +52,7 @@ class ResetPasswordController extends Controller
                 $data = array(
                     "name"=>$name, 
                     "request" => "A Request has been recieved to change the password for your Bottom Line Saving account.",
-                    "resetButton" => "http://localhost.com:3000/set-password?token=".$token,
+                    "resetButton" => env('APP_URL')."/user/reset_password?token=".$token,
                     "didNotInitiate" => "If you did not initiate this request, please contact us immediately at ".Constants::SupportEmail,
                     "thankYou"   => "Thank you,",
                     "companyname" => "Bottom Line Savings" 
@@ -122,7 +119,7 @@ class ResetPasswordController extends Controller
             else
             {
                 // 68a0099b3f45357798639a30c5fe3154 real password
-                $user->password = $request->password;
+                $user->password = Hash::make($request->password);
                 $user->forget_token = null;
                 $user->forget_token_expires_at = null;
                 $user->update(); //or $user->save();
@@ -132,16 +129,12 @@ class ResetPasswordController extends Controller
 
                 return $user;
             } 
-        } 
-        catch(Throwable $e) 
-        {
+        } catch(Throwable $e) {
             DB::rollback();
             return response()->json([
                 "message" => $e->getMessage()
             ], 422);
         }
 
-   
-        
     }
 }

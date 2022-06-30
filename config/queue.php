@@ -79,8 +79,12 @@ return [
     |
     */
 
+    // In laravel 8 version upgrade...
+    // Next, the failed.driver configuration option within your queue configuration 
+    // file should be updated to database-uuids. https://laravel.com/docs/8.x/upgrade#model-factories
+
     'failed' => [
-        'driver' => env('QUEUE_FAILED_DRIVER', 'database'),
+        'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
         'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',
     ],

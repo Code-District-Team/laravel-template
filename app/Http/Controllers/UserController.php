@@ -17,10 +17,9 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use App\Scopes\TenantScope;
 use Illuminate\Support\Facades\DB;
-
+use Throwable;
+use Illuminate\Support\Facades\Hash;
 class UserController extends Controller {
-    
-  
     
     public function login(Request $request) {
         $request->validate([
@@ -34,9 +33,8 @@ class UserController extends Controller {
         $user = User::withoutGlobalScope(TenantScope::class)->with('tenant')->where('email', $email)->first();
         //getting hash of password
         //$hashedPassword = md5($request->input('password'));
-        
         //checking hashed password matches the user's password
-        if(strcmp($password, $user->password) == 0) {
+        if(Hash::check($password, $user->password)) {
             //generating api_token
             $token = uniqid($user->id);
             //adding token to user
@@ -85,12 +83,15 @@ class UserController extends Controller {
 
             DB::beginTransaction();
             $userData = $request->except(['company_name', 'domain_prefix']);
-            $userData['name'] = $userData['first_name'] . ' ' . $userData['last_name'];
+            // $userData['name'] = $userData['first_name'] . ' ' . $userData['last_name'];
+            
+            // Don't create tenant there...
             $tenant = Tenant::create($request->only(['company_name', 'domain_prefix']));
+            $userData['password'] = Hash::make($request->password);
             $userData['tenant_id'] = $tenant->id;
             $userData['type'] = UserType::Admin;
-            $user = User::create($userData);
 
+            $user = User::create($userData);
 
             DB::commit();
 
