@@ -56,7 +56,7 @@ class UserController extends Controller {
     public function logout(Request $request) {
         //getting logged in user
         $user = Auth::user();
-        $userModel = User::withoutGlobalScopes()->find($user->id);
+        $userModel = User::find($user->id);
         $userModel->api_token = null;
         $userModel->save();
         Auth::logout();
@@ -74,7 +74,7 @@ class UserController extends Controller {
             'email' => ['required','email',Rule::unique('users', 'email')->ignore((!empty($id)) ? $id : 0)],
             'password' => 'required',
             'company_name' => 'required',
-            // 'domain_prefix' => ['required', 'unique:tenants,domain_prefix']
+            'domain_prefix' => ['required', 'unique:tenants,domain_prefix']
         ];
         
         $request->validate($validateArray);
@@ -86,10 +86,9 @@ class UserController extends Controller {
             // $userData['name'] = $userData['first_name'] . ' ' . $userData['last_name'];
             
             // Don't create tenant there...
-            // $tenant = Tenant::create($request->only(['company_name', 'domain_prefix']));
-            // $userData['tenant_id'] = $tenant->id;
+            $tenant = Tenant::create($request->only(['company_name', 'domain_prefix']));
             $userData['password'] = Hash::make($request->password);
-            $userData['tenant_id'] = 0;
+            $userData['tenant_id'] = $tenant->id;
             $userData['type'] = UserType::Admin;
 
             $user = User::create($userData);
